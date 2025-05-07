@@ -7,7 +7,7 @@
 
 # === Configuration ===
 WINEPREFIX="$HOME/Games/starcraft2"
-SC2_EXECUTABLE="/home/dawciobiel/12.TB.sdc1.ext4.luks.dane/games/StarCraft II/Support64/SC2Switcher_x64.exe"
+SC2_EXECUTABLE="$HOME/Games/StarCraft II/Support64/SC2Switcher_x64.exe"
 
 # === Check if executable exists ===
 if [ ! -f "$SC2_EXECUTABLE" ]; then
