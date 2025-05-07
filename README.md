@@ -113,16 +113,3 @@ chmod +x run-sc2.sh
 * **Date**: 2025-05-07
 
 ---
-
-Enjoy playing StarCraft II on Linux with Wine and DXVK! 🎮🚀
-
-```
-
----
-
-### Steps to use the `README.md`:
-
-1. **Create a new repository** on GitHub (or use an existing one).
-2. **Create a new file** named `README.md` in the root of the repository.
-3. **Copy and paste** the above content into the `README.md`.
-4. **Commit and push** your changes to GitHub.
