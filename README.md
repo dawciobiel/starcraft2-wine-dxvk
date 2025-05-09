@@ -10,9 +10,12 @@ Before running the scripts, make sure you have the following installed on your s
 - **Winetricks**
 - **wget** (for downloading DXVK)
 - **Git** (optional, for cloning the repo)
+- **bash** shell (tested on version 5.2+)
+- **python 3.6+** (optional)
 
 Make sure you have the **Battle.net installer** (Battle.net-Setup.exe) downloaded from the official Blizzard website:
-[https://www.blizzard.com/download](https://www.blizzard.com/download)
+[https://www.blizzard.com/download](https://www.blizzard.com/download).
+Place this file in the same directory in which the  starcraft2-wine-dxvk scripts are.
 
 ### Recommended:
 
