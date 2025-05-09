@@ -1,0 +1,40 @@
+# === Wine-related directories ===
+/Games/wine-*/drive_c/users/*/Temp/
+/Games/wine-*/dosdevices/z:/
+*.lnk
+*.url
+*.tmp
+*.bak
+*.log
+
+# === Battle.net/StarCraft II launchers ===
+Battle.net-Setup.exe
+*.exe
+*.msi
+
+# === Log files ===
+*.log
+*.out
+*.err
+
+# === Python stuff ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+
+# === VSCode, editors, temp files ===
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# === System files ===
+Thumbs.db
+desktop.ini
+

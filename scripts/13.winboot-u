@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# wineboot -u jest narzędziem w Wine, które aktualizuje lub naprawia środowisko (prefix) Wine, co jest przydatne po aktualizacji Wine lub zmianach w konfiguracji. Może pomóc w rozwiązaniu problemów z aplikacjami, które przestały działać poprawnie po aktualizacji lub zmianach w systemie.
+#
+
+set -x
+WINE_HOME="/usr"
+WINEPREFIX="$HOME/Games/wine-10.7_staging"
+
+$WINE_HOME/bin/wineboot -u

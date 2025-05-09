@@ -6,7 +6,7 @@
 # Date: 2025-05-07
 
 # === Configuration ===
-WINEPREFIX="$HOME/Games/starcraft2"
+WINEPREFIX="$HOME/Games/swine-10.7_stagin"
 SC2_EXECUTABLE="$HOME/Games/StarCraft II/Support64/SC2Switcher_x64.exe"
 DESKTOP_FILE="$HOME/.local/share/applications/starcraft2.desktop"
 

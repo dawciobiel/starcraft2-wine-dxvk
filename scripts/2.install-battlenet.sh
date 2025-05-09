@@ -6,8 +6,9 @@
 # Date: 2025-05-07
 
 # === Configuration ===
-WINEPREFIX="$HOME/Games/starcraft2"
-INSTALLER="Battle.net-Setup.exe"  # Change to the path of the Battle.net installer
+# set -x
+WINEPREFIX="$HOME/Games/wine-10.7_staging"
+INSTALLER="Battle.net-Setup.exe"
 
 # === Check if Battle.net installer exists ===
 if [ ! -f "$INSTALLER" ]; then
@@ -17,7 +18,7 @@ if [ ! -f "$INSTALLER" ]; then
 fi
 
 # === Create a fresh 64-bit WINEPREFIX ===
-echo "📦 Creating a new 64-bit WINEPREFIX..."
+echo "📦 Creating a new 64-bit WINEPREFIX... - fixme: winboot -u is updating already existed wine configuration after system update or update of wine"
 WINEARCH=win64 WINEPREFIX="$WINEPREFIX" wineboot -u
 
 # === Install corefonts, vcrun2017, and set Windows 10 as the version ===
@@ -28,10 +29,7 @@ WINEPREFIX="$WINEPREFIX" winetricks -q corefonts vcrun2017 settings win10
 echo "⚙️ Installing DXVK for better performance..."
 WINEPREFIX="$WINEPREFIX" winetricks -q dxvk
 
-# === Run the Battle.net installer ===
-echo "🚀 Running Battle.net installer..."
+# === Launching Battle.net installer installer ===
+echo "🚀 Launching Battle.net installer..."
 WINEPREFIX="$WINEPREFIX" wine "$INSTALLER"
 
-echo "✅ Battle.net Launcher installed successfully."
-echo "➡️ After installation, use the following to run Battle.net:"
-echo "    WINEPREFIX=\"$WINEPREFIX\" wine \"\$HOME/.wine/drive_c/Program Files (x86)/Battle.net/Battle.net Launcher.exe\""
