@@ -6,14 +6,19 @@
 # Date: 2025-05-07
 
 # === Configuration ===
-WINEPREFIX="$HOME/Games/swine-10.7_stagin"
-SC2_EXECUTABLE="$HOME/Games/StarCraft II/Support64/SC2Switcher_x64.exe"
-DESKTOP_FILE="$HOME/.local/share/applications/starcraft2.desktop"
+# Read wine variables
+source wine.conf
+
+# Show all variables in DEBUG MODE
+if [ "$DEBUG_MODE" = "1" ]; then
+    echo "DEBUG_MODE true"
+    set -x
+fi
 
 # === Check if executable exists ===
-if [ ! -f "$SC2_EXECUTABLE" ]; then
+if [ ! -f "$SC2_EXE" ]; then
   echo "❌ StarCraft II executable not found at:"
-  echo "   $SC2_EXECUTABLE"
+  echo "   $SC2_EXE"
   echo "🛠️  Please verify the path and update this script."
   exit 1
 fi
@@ -21,12 +26,12 @@ fi
 # === Create .desktop file ===
 echo "📄 Creating .desktop shortcut..."
 
-cat << EOF > "$DESKTOP_FILE"
+cat << EOF > "$BATTLENET_DESKTOP_LINK"
 [Desktop Entry]
 Version=1.0
 Name=StarCraft II
 Comment=Play StarCraft II with Wine
-Exec=env WINEPREFIX="$WINEPREFIX" wine "$SC2_EXECUTABLE"
+Exec=env WINEPREFIX="$WINEPREFIX" wine "$SC2_EXE"
 Icon=starcraft2
 Terminal=false
 Type=Application
@@ -34,7 +39,7 @@ Categories=Game;
 EOF
 
 # === Make the .desktop file executable ===
-chmod +x "$DESKTOP_FILE"
+chmod +x "$BATTLENET_DESKTOP_LINK"
 
-echo "✅ .desktop file created at: $DESKTOP_FILE"
+echo "✅ .desktop file created at: $BATTLENET_DESKTOP_LINK"
 echo "➡️ You can now find StarCraft II in your application menu."

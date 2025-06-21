@@ -1,3 +1,5 @@
+# FIXME Ten skrypt nie jest już potrzebny. DXVK jest instalowane za pomocą skryptu `2.install-battlenet.sh`
+
 #!/bin/bash
 
 # === DXVK Installation Script ===
@@ -13,9 +15,15 @@
 
 # === Variables ===
 DXVK_VERSION="2.6.1"  # Update to the latest version as needed
-DXVK_URL="https://github.com/doitsujin/dxvk/releases/download/v$DXVK_VERSION/dxvk-$DXVK_VERSION.tar.gz"
-INSTALL_DIR="$HOME/Games/wine-10.7_staging"
-WINEPREFIX="$HOME/Games/wine-10.7_staging"
+DXVK_URL="https://github.com/doitsujin/dxvk/releases/download/$DXVK_VERSION/dxvk-$DXVK_VERSION.tar.gz"
+# Read wine variables
+source wine.conf
+
+# Show all variables in DEBUG MODE
+if [ "$DEBUG_MODE" = "1" ]; then
+    echo "DEBUG_MODE włączony – uruchamiam set -x"
+    set -x
+fi
 
 # === Download DXVK ===
 echo "Downloading DXVK $DXVK_VERSION..."
