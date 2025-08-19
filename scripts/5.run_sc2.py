@@ -33,7 +33,7 @@ import shutil
 # === Configuration ===
 WINE_HOME = "/usr"
 WINEPREFIX = os.path.expanduser("~/Games/wine-10.7_staging")
-SC2_EXE = "/12.TB.sdc1.ext4.luks.dane/games/StarCraft II/Support64/SC2Switcher_x64.exe"
+SC2_EXE = "/mnt/WD1200/part1/games/StarCraft II/Support64/SC2Switcher_x64.exe"
 
 # Set up logging directory
 LOG_DIR = os.path.expanduser("~/Games/sc2-logs")
