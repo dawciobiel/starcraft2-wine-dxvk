@@ -18,9 +18,15 @@ for arg in "$@"; do
 done
 
 # ─────────────────────────────────────────────────────────────
-# Get list of matching processes
+# Get list of matching processes, excluding this script and any process running it
+mypid=$$
+myname=$(basename "$0")
 tempfile=$(mktemp)
-ps -eo pid,args | grep -Ei 'battle\.net|battlenet' | grep -v grep > "$tempfile"
+
+ps -eo pid,args \
+    | grep -Ei 'battle\.net|battlenet' \
+    | grep -v grep \
+    | awk -v mypid="$mypid" -v myname="$myname" '$1 != mypid && $0 !~ myname' > "$tempfile"
 
 if [ ! -s "$tempfile" ]; then
     echo "No processes containing 'battlenet' or 'battle.net' were found."
@@ -64,4 +70,3 @@ done < "$tempfile"
 # ─────────────────────────────────────────────────────────────
 # Cleanup
 rm "$tempfile"
-echo
