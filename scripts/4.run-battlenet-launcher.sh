@@ -37,6 +37,11 @@ if [ "$DEBUG_MODE" = "1" ]; then
 fi
 
 # === Functions ===
+
+function create_log_file_symlink() {
+	ln --symbolic --force "$LOG_FILE" "$LOG_DIR"/battlenet-current.log
+}
+
 function launch_battlenet() {
         echo "🚀 Launching Battle.net Launcher..."
         echo "[info] Launching Battle.net Launcher" >> "$LOG_FILE"
@@ -52,6 +57,8 @@ function launch_battlenet() {
                 2>&1 | grep -v 'dispatch_exception assertion failure exception' \
                 >> "$LOG_FILE"
         } &
+	# Mozna uruchamiac przez `gamemoderun` - ze niby ma byc lepiej
+
 }
 
 function check_dependencies() {
@@ -97,6 +104,7 @@ function print_wine_info() {
         echo "🕓 Start time: $(date)"
         echo "Wine version: $WINE_VERSION"
         echo "Wine architecture: $WINE_ARCH"
+	echo "Log file [ $LOG_DIR/battlenet-current.log ] (symlink)"
         echo "Log file [ $LOG_FILE ]"
         echo
 
@@ -105,6 +113,7 @@ function print_wine_info() {
           echo "[info] Wine HOME [ $WINE_HOME ]"
           echo "[info] Wine version: $WINE_VERSION"
           echo "[info] Wine architecture: $WINE_ARCH"
+	  echo "[info] gamemode deamon version: $(gamemoded --version)"
           echo
         } >> "$LOG_FILE"
 }
@@ -112,8 +121,11 @@ function print_wine_info() {
 # === Main flow ===
 trap cleanup SIGINT SIGTERM
 
+create_log_file_symlink
 check_dependencies
 check_files
 kill_wineservers
 print_wine_info
 launch_battlenet
+echo "[info] $(gamemoded -s)"
+

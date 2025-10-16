@@ -1,6 +1,12 @@
-# FIXME Ten skrypt nie jest już potrzebny. DXVK jest instalowane za pomocą skryptu `2.install-battlenet.sh`
-
 #!/bin/bash
+
+source colors
+
+echo -e "\n$RED[FIXME]$NC Ten skrypt nie jest już potrzebny. DXVK jest instalowane za pomocą skryptu '2.install-battlenet.sh'"
+
+exit 1
+
+#   !/bin/bash
 
 # === DXVK Installation Script ===
 # This script downloads and installs DXVK (DirectX to Vulkan translation layer) 
@@ -14,7 +20,7 @@
 # Before using this script, make sure that you have set up a proper Wine prefix.
 
 # === Variables ===
-DXVK_VERSION="2.6.1"  # Update to the latest version as needed
+DXVK_VERSION="2.7.1"  # Update to the latest version as needed
 DXVK_URL="https://github.com/doitsujin/dxvk/releases/download/$DXVK_VERSION/dxvk-$DXVK_VERSION.tar.gz"
 # Read wine variables
 source wine.conf

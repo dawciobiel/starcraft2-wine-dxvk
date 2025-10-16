@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# ===================================================
+# Script Name: colors
+# Author: Dawid Bielecki - dawciobiel
+# Date: 2024-12-25
+# Version: 1.0
+# Description: Setting variables for colors for bash scripts.
+# Usage: 
+#        In other script:
+#        source ./colors
+#        echo -e "${RED}This is red text${NC}"
+# ===================================================
+
+# Colors
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
+MAGENTA='\033[0;35m'
+WHITE='\033[1;37m'
+
+NC='\033[0m' 		# No color

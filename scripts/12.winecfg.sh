@@ -2,7 +2,7 @@
 
 # === Configuration ===
 WINE_HOME="/usr"
-WINEPREFIX="$HOME/Games/wine-10.7_staging"
+WINEPREFIX="$HOME/Games/wine-10.16_staging"
 
 # === Main flow ===
 # === Launching winecfg

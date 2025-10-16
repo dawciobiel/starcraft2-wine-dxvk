@@ -4,7 +4,12 @@
 #
 
 set -x
-WINE_HOME="/usr"
-WINEPREFIX="$HOME/Games/wine-10.7_staging"
+
+# === Configuration ===
+# Read wine variables
+source wine.conf
+
+# WINE_HOME="/usr"
+# WINEPREFIX="$HOME/Games/wine-10.7.."
 
 $WINE_HOME/bin/wineboot -u
