@@ -24,11 +24,14 @@
 
 # === Configuration ===
 # Read wine variables
-source wine.conf
+source "$(dirname "$0")/wine.conf"
 
 # Read configuration variables to one line and remove comments from it
 MANGOHUD_VARIABLES=$(grep -v '^\s*#' mangohud.conf | tr -d '\n' | sed 's/\\//g' | xargs)
 DXVK_VARIABLES=$(grep -v '^\s*#' dxvk.conf | tr -d '\n' | sed 's/\\//g' | xargs)
+
+# Read OpenGL, Vulkan NVIDIA variables
+source "$(dirname "$0")/opengl_vulgan.conf"
 
 # Show all variables in DEBUG MODE
 if [ "$DEBUG_MODE" = "1" ]; then
