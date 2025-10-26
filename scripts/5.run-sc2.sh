@@ -85,7 +85,7 @@ function launch_sc2() {
         {
             env $DXVK_VARIABLES \
             env $MANGOHUD_VARIABLES \
-            WINE_ARCH="$WINE_ARCH" \
+            WINEARCH="$WINEARCH" \
             WINEPREFIX="$WINEPREFIX" \
             WINEDEBUG="$WINEDEBUG" \
             "$WINE_HOME/bin/wine" "$SC2_EXE" \

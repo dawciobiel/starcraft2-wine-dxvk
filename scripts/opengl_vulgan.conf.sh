@@ -2,6 +2,10 @@
 
 # OpenGL/Vulkan NVIDIA Settings Variables
 
+# TODO UWAGA
+# Część zmiennych występująca w tym pliku pokrywa się ze zmiennymi w dxvk.conf. Zmienne w dxvk.conf powinny być przeniesione tutaj.
+# Przy czym nalezy sprawdzic czy zmienna moze byc ustwaiana w konfigu czy musi jako zmienna systemowa.
+
 # Tryb kompozytora (tez wpływa na OpenGL)
 export KWIN_TRIPLE_BUFFER=1
 
@@ -25,10 +29,12 @@ export __GL_PERF_PROFILE=1
 export DXVK_LOG_LEVEL=none
 # asynchronous shader compilation - DXVK_ASYNC
 export DXVK_ASYNC=1             # asynchronous shader compilation, przyspiesza start
-export DXVK_HUD=0               # wyłącza nakładkę DXVK
+# export DXVK_HUD=0               # wyłącza nakładkę DXVK // Istnieje w dxvk.conf
 export VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
 export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
 
-# TODO
-# UWAGA
-# Część zmiennych występująca w tym pliku pokrywa się ze zmiennymi w dxvk.conf. Zmienne w dxvk.conf powinny być przeniesione tutaj.
+# Debugowanie problemow z `VK_ERROR_OUT_OF_HOST_MEMORY`
+export DXVK_MEMORY_TRACKER=0
+export DXVK_LOG_LEVEL=warn
+export DXVK_ENABLE_PIPECOMPILER=0
+
