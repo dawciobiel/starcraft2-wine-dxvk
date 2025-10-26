@@ -197,9 +197,10 @@ function print_wine_info() {
 # === Launcher ===
 function launch_battlenet() {
     log_header "🚀 Launching Battle.net Launcher in background..."
+    echo -e ""
     echo "[info] Launching Battle.net Launcher" >> "$LOG_FILE"
 
-    {
+#     {
         LAUNCH_CMD=("$WINE_HOME$WINE_BIN" "$WINEPREFIX/$BATTLENET_EXE")
         if [ "$USE_GAMEMODE" = "1" ]; then
             LAUNCH_CMD=("gamemoderun" "${LAUNCH_CMD[@]}")
@@ -221,7 +222,7 @@ function launch_battlenet() {
         if [ "$DEBUG_MODE" = "1" ]; then
             set +x
         fi
-    } &
+#     } &
 }
 
 # === Main flow ===
