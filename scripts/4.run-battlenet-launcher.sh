@@ -192,6 +192,9 @@ function print_wine_info() {
         echo "[info] gamemode daemon version: $(gamemoded --version 2>/dev/null || echo "not available")"
         echo
     } >> "$LOG_FILE"
+
+    # Log runtime information
+    source "$(dirname "$0")/15.runtime-info.sh"
 }
 
 # === Launcher ===
@@ -200,29 +203,29 @@ function launch_battlenet() {
     echo -e ""
     echo "[info] Launching Battle.net Launcher" >> "$LOG_FILE"
 
-#     {
-        LAUNCH_CMD=("$WINE_HOME$WINE_BIN" "$WINEPREFIX/$BATTLENET_EXE")
-        if [ "$USE_GAMEMODE" = "1" ]; then
-            LAUNCH_CMD=("gamemoderun" "${LAUNCH_CMD[@]}")
-        fi
+	{
+	        LAUNCH_CMD=("$WINE_HOME$WINE_BIN" "$WINEPREFIX/$BATTLENET_EXE")
+	        if [ "$USE_GAMEMODE" = "1" ]; then
+	            LAUNCH_CMD=("gamemoderun" "${LAUNCH_CMD[@]}")
+	        fi
 
-        if [ "$DEBUG_MODE" = "1" ]; then
-            set -x
-        fi
+	        if [ "$DEBUG_MODE" = "1" ]; then
+	            set -x
+	        fi
 
-        env "${DXVK_VARIABLES[@]}" "${MANGOHUD_VARIABLES[@]}" "${WINE_VARIABLES[@]}" \
-        "${LAUNCH_CMD[@]}" \
-        2>&1 \
-        | grep -v 'dispatch_exception assertion failure exception' \
-        | grep -v 'experimental wow64 mode' \
-        | grep -v 'apartment not initialised' \
-        | grep -v 'fixme:' \
-        >> "$LOG_FILE"
+	        env "${DXVK_VARIABLES[@]}" "${MANGOHUD_VARIABLES[@]}" "${WINE_VARIABLES[@]}" \
+	        "${LAUNCH_CMD[@]}" \
+	        2>&1 \
+	        | grep --invert-match 'dispatch_exception assertion failure exception' \
+	        | grep --invert-match 'experimental wow64 mode' \
+	        | grep --invert-match 'apartment not initialised' \
+	        | grep --invert-match 'fixme:' \
+	        >> "$LOG_FILE"
 
-        if [ "$DEBUG_MODE" = "1" ]; then
-            set +x
-        fi
-#     } &
+	        if [ "$DEBUG_MODE" = "1" ]; then
+	            set +x
+	        fi
+	} &
 }
 
 # === Main flow ===
@@ -231,8 +234,9 @@ trap cleanup SIGINT SIGTERM
 parse_args "$@"
 
 if [ "$DEBUG_MODE" = "1" ]; then
-    log_debug "Final environment before launch:\n"
-    env "${DXVK_VARIABLES[@]}" "${MANGOHUD_VARIABLES[@]}" "${WINE_VARIABLES[@]}" | grep -E 'DXVK|MANGOHUD|WINE|GL_|PULSE'
+    log_debug "Final environment before launch:"
+    echo
+    env "${DXVK_VARIABLES[@]}" "${MANGOHUD_VARIABLES[@]}" "${WINE_VARIABLES[@]}" | grep -E 'DXVK|MANGOHUD|WINE|GL_|PULSE|LOG|log|DEBUG'
     echo
 fi
 
