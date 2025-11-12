@@ -16,7 +16,7 @@
 #   2025-05-08
 #
 # MODIFIED:
-#   2025-05-09
+#   2025-11-12
 #
 # LICENSE:
 #   MIT
@@ -25,6 +25,7 @@
 # === Configuration ===
 # Read wine variables
 source wine.conf
+source "$(dirname "$0")/logger.sh"
 
 # Read configuration variables to one line and remove comments from it
 MANGOHUD_VARIABLES=$(grep -v '^\s*#' mangohud.conf | tr -d '\n' | sed 's/\\//g' | xargs)
@@ -32,14 +33,14 @@ DXVK_VARIABLES=$(grep -v '^\s*#' dxvk.conf | tr -d '\n' | sed 's/\\//g' | xargs)
 
 # Show all variables in DEBUG MODE
 if [ "$DEBUG_MODE" = "1" ]; then
-    echo "DEBUG_MODE true"
+    log_debug_console "DEBUG_MODE true"
     set -x
 fi
 
 function check_dependencies() {
   for cmd in wine wineserver; do
     if ! command -v "$cmd" &> /dev/null; then
-      echo "❌ Error: Command $cmd not found. Install required packages." >&2
+      log_error_console "Command '$cmd' not found. Install required packages."
       exit 1
     fi
   done
@@ -47,41 +48,37 @@ function check_dependencies() {
 
 function check_executable() {
   if [ ! -f "$SC2_EXE" ]; then
-    echo "❌ Error: StarCraft II executable not found at:" >&2
-    echo "   [ $SC2_EXE ]" >&2
-    echo "🛠️  Please verify the path and update this script." >&2
+    log_error_console "StarCraft II executable not found at:"
+    log_error_console "   [ $SC2_EXE ]"
+    log_info_console "Please verify the path and update this script."
     exit 1
   fi
 
-  echo "✅ StarCraft II executable found."
+  log_success_console "StarCraft II executable found."
 }
 
 function cleanup() {
-  echo "🛑 Script interrupted. Cleaning up..." >> "$LOG"
+  log_info_file "Script interrupted. Cleaning up..."
   wineserver -k
   exit 0
 }
 
 function kill_wineservers() {
-  echo "🧹 Killing existing wineservers..."
+  log_info_console "Killing existing wineservers..."
   wineserver -k
   "$WINE_HOME/bin/wineserver" -k
   pkill wineserver 2>/dev/null || true
 }
 
 function print_wine_info() {
-  {
-    echo "🕓 Start time: $(date)"
-    echo "Wine HOME [ $WINE_HOME ]"
-    echo "Wine version:"
-    "$WINE_HOME/bin/wine" --version
-    echo
-  } >> "$LOG"
+    log_info_file "Start time: $(date)"
+    log_info_file "Wine HOME [ $WINE_HOME ]"
+    log_info_file "Wine version: $($WINE_HOME/bin/wine --version)"
 }
 
 function launch_sc2() {
-        echo "🚀 Launching StarCraft II..."
-        echo "[info] Launching StarCraft II" >> "$LOG_FILE"
+        log_info_console "Launching StarCraft II..."
+        log_info_file "Launching StarCraft II"
         {
             env $DXVK_VARIABLES \
             env $MANGOHUD_VARIABLES \
@@ -89,8 +86,7 @@ function launch_sc2() {
             WINEPREFIX="$WINEPREFIX" \
             WINEDEBUG="$WINEDEBUG" \
             "$WINE_HOME/bin/wine" "$SC2_EXE" \
-            2>&1 | grep -v 'dispatch_exception assertion failure exception' \
-            >> "$LOG_FILE"
+            &>> "$LOG_FILE"
         } &
         # SC2_EXE na chwile obecną jest w folderze który nie jest wewnątrz folderu WINEPREFIX
         #  więc chyba nie może tak zdiałać. Chociaż z drugiej strony Battlenet Launcher i tak odpala w ten sposób ten plik - czyli spoza wewnętrznego folderu WINEPREFIX
@@ -104,3 +100,4 @@ check_executable
 kill_wineservers
 print_wine_info
 launch_sc2
+

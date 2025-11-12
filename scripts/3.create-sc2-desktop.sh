@@ -8,23 +8,24 @@
 # === Configuration ===
 # Read wine variables
 source wine.conf
+source "$(dirname "$0")/logger.sh"
 
 # Show all variables in DEBUG MODE
 if [ "$DEBUG_MODE" = "1" ]; then
-    echo "DEBUG_MODE true"
+    log_debug_console "DEBUG_MODE true"
     set -x
 fi
 
 # === Check if executable exists ===
 if [ ! -f "$SC2_EXE" ]; then
-  echo "❌ StarCraft II executable not found at:"
-  echo "   $SC2_EXE"
-  echo "🛠️  Please verify the path and update this script."
+  log_error_console "StarCraft II executable not found at:"
+  log_error_console "   $SC2_EXE"
+  log_info_console "🛠️  Please verify the path and update this script."
   exit 1
 fi
 
 # === Create .desktop file ===
-echo "📄 Creating .desktop shortcut..."
+log_info_console "📄 Creating .desktop shortcut..."
 
 cat << EOF > "$BATTLENET_DESKTOP_LINK"
 [Desktop Entry]
@@ -41,5 +42,5 @@ EOF
 # === Make the .desktop file executable ===
 chmod +x "$BATTLENET_DESKTOP_LINK"
 
-echo "✅ .desktop file created at: $BATTLENET_DESKTOP_LINK"
-echo "➡️ You can now find StarCraft II in your application menu."
+log_success_console ".desktop file created at: $BATTLENET_DESKTOP_LINK"
+log_info_console "➡️ You can now find StarCraft II in your application menu."

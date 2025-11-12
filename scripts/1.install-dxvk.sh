@@ -1,8 +1,8 @@
 #!/bin/bash
 
-source colors
+source "$(dirname "$0")/logger.sh"
 
-echo -e "\n$RED[FIXME]$NC Ten skrypt nie jest już potrzebny. DXVK jest instalowane za pomocą skryptu '2.install-battlenet.sh'"
+log_error_console "Ten skrypt nie jest już potrzebny. DXVK jest instalowane za pomocą skryptu '2.install-battlenet.sh'"
 
 exit 1
 
@@ -27,20 +27,20 @@ source wine.conf
 
 # Show all variables in DEBUG MODE
 if [ "$DEBUG_MODE" = "1" ]; then
-    echo "DEBUG_MODE włączony – uruchamiam set -x"
+    log_debug_console "DEBUG_MODE włączony – uruchamiam set -x"
     set -x
 fi
 
 # === Download DXVK ===
-echo "Downloading DXVK $DXVK_VERSION..."
+log_info_console "Downloading DXVK $DXVK_VERSION..."
 wget -q $DXVK_URL -O dxvk-$DXVK_VERSION.tar.gz
 
 # === Extract DXVK ===
-echo "Extracting DXVK..."
+log_info_console "Extracting DXVK..."
 tar -xvzf dxvk-$DXVK_VERSION.tar.gz
 
 # === Install DXVK ===
-echo "Installing DXVK into Wine prefix..."
+log_info_console "Installing DXVK into Wine prefix..."
 
 # Ensure the system32 and system64 directories exist
 mkdir -p $WINEPREFIX/drive_c/windows/system32
@@ -54,5 +54,5 @@ cp -r dxvk-$DXVK_VERSION/x64/* $WINEPREFIX/drive_c/windows/system64/
 rm -rf dxvk-$DXVK_VERSION.tar.gz dxvk-$DXVK_VERSION
 
 # === Installation Complete ===
-echo "✅ DXVK $DXVK_VERSION has been successfully installed to: $INSTALL_DIR"
+log_success_console "DXVK $DXVK_VERSION has been successfully installed to: $INSTALL_DIR"
 
