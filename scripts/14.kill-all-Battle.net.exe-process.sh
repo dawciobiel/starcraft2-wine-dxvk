@@ -1,9 +1,34 @@
 #!/bin/bash
-#
-# 14.kill-all-Battle.net.exe-process.sh
-# Description: Kill all "battlenet" or "battle.net" processes in interactive, force or dry-run mode.
-# Author: dawciobiel (http://github.com/dawciobiel)
-# Date: 2025-09-02
+# =============================================================================
+# Script Name: kill-all-battlenet-processes.sh
+# Description: Terminates all running Battle.net-related processes in interactive, force, or dry-run mode.
+#              Also attempts to kill the tracked StarCraft II process via PID file (/tmp/sc2.pid).
+# Author: Dawid Bielecki ("dawciobiel")
+# Date: 2025-11-03
+# GitHub: https://github.com/dawciobiel
+# =============================================================================
+
+# ─────────────────────────────────────────────────────────────
+# Help message
+show_help() {
+    cat <<EOF
+Usage: $0 [OPTIONS]
+
+Terminates all running Battle.net-related processes.
+
+Options:
+  --force        Kill processes without asking for confirmation.
+  --dry-run      Show which processes would be killed, without actually killing them.
+  -h, --help     Display this help message and exit.
+
+Examples:
+  $0             Interactive mode (asks before killing each process)
+  $0 --force     Force kill all matching processes
+  $0 --dry-run   Preview which processes would be killed
+
+EOF
+    exit 0
+}
 
 # ─────────────────────────────────────────────────────────────
 # Parse command-line arguments
@@ -14,11 +39,12 @@ for arg in "$@"; do
     case "$arg" in
         --force) FORCE=true ;;
         --dry-run) DRYRUN=true ;;
+        -h|--help) show_help ;;
     esac
 done
 
 # ─────────────────────────────────────────────────────────────
-# Get list of matching processes, excluding this script and any process running it
+# Get list of matching Battle.net processes, excluding this script
 mypid=$$
 myname=$(basename "$0")
 tempfile=$(mktemp)
@@ -29,13 +55,13 @@ ps -eo pid,args \
     | awk -v mypid="$mypid" -v myname="$myname" '$1 != mypid && $0 !~ myname' > "$tempfile"
 
 if [ ! -s "$tempfile" ]; then
-    echo "No processes containing 'battlenet' or 'battle.net' were found."
+    echo "✅ No Battle.net-related processes found."
     rm "$tempfile"
     exit 0
 fi
 
 # ─────────────────────────────────────────────────────────────
-# Open terminal input as file descriptor for interactive mode
+# Open terminal input for interactive mode
 exec 3</dev/tty
 
 # ─────────────────────────────────────────────────────────────
@@ -70,3 +96,4 @@ done < "$tempfile"
 # ─────────────────────────────────────────────────────────────
 # Cleanup
 rm "$tempfile"
+

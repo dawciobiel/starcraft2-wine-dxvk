@@ -23,7 +23,7 @@
 #==============================================================================
 
 # === Configuration ===
-DEBUG_MODE=0
+DEBUG_MODE=0 # Read proper value from wine.conf later.
 
 source colors
 
@@ -64,8 +64,10 @@ function log_info() {
 }
 
 function log_debug() {
-    echo -e "[${YELLOW}debug${NC}] $*"
-    echo "[debug] $*" >> "$LOG_FILE"
+    if [ "$DEBUG_MODE" = "1" ]; then
+	echo -e "[${YELLOW}debug${NC}] $*"
+	echo "[debug] $*" >> "$LOG_FILE"
+    fi
 }
 
 function log_error() {
@@ -107,7 +109,9 @@ function parse_args() {
 function validate_variables() {
     local -n var_array=$1
     local label=$2
+    log_info "Validate $1"
     for var in "${var_array[@]}"; do
+        log_debug "Validate $label variable: $var"
         if [[ ! "$var" =~ ^[a-zA-Z_][a-zA-Z0-9_]*=.+ ]]; then
             log_error "Invalid $label variable: $var"
             exit 1
@@ -138,6 +142,7 @@ function check_files() {
 }
 
 function kill_wineservers() {
+    echo ""
     log_header "🧹 Killing existing wineservers..."
     wineserver -k
     "$WINE_HOME$WINE_SERVER_BIN" -k
@@ -145,9 +150,20 @@ function kill_wineservers() {
 }
 
 function cleanup() {
+    echo "[info] Killing Battle.net processes..." >> "$LOG_FILE"
+    pkill -f Battle.net.exe
+    pkill -f Agent.exe
+
     log_warn "Script interrupted. Cleaning up..."
     echo "🛑 Script interrupted. Cleaning up..." >> "$LOG_FILE"
     wineserver -k
+
+    echo "[info] Refreshing screen..." >> "$LOG_FILE"
+    command -v xrefresh && xrefresh
+
+    echo "[info] Restarting Budgie panel..." >> "$LOG_FILE"
+    budgie-panel --replace &
+
     exit 0
 }
 
@@ -199,36 +215,45 @@ function print_wine_info() {
 
 # === Launcher ===
 function launch_battlenet() {
-    log_header "🚀 Launching Battle.net Launcher in background..."
     echo -e ""
+    log_header "🚀 Launching Battle.net Launcher in background..."
+    echo ""
     echo "[info] Launching Battle.net Launcher" >> "$LOG_FILE"
 
-	{
-	        LAUNCH_CMD=("$WINE_HOME$WINE_BIN" "$WINEPREFIX/$BATTLENET_EXE")
-	        if [ "$USE_GAMEMODE" = "1" ]; then
-	            LAUNCH_CMD=("gamemoderun" "${LAUNCH_CMD[@]}")
-	        fi
+    LAUNCH_CMD=("$WINE_HOME$WINE_BIN" "$WINEPREFIX/$BATTLENET_EXE")
+    if [ "$USE_GAMEMODE" = "1" ]; then
+        LAUNCH_CMD=("gamemoderun" "${LAUNCH_CMD[@]}")
+    fi
 
-	        if [ "$DEBUG_MODE" = "1" ]; then
-	            set -x
-	        fi
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-	        env "${DXVK_VARIABLES[@]}" "${MANGOHUD_VARIABLES[@]}" "${WINE_VARIABLES[@]}" \
-	        "${LAUNCH_CMD[@]}" \
-	        2>&1 \
-	        | grep --invert-match 'dispatch_exception assertion failure exception' \
-	        | grep --invert-match 'experimental wow64 mode' \
-	        | grep --invert-match 'apartment not initialised' \
-	        | grep --invert-match 'fixme:' \
-	        >> "$LOG_FILE"
+    if [ "$DEBUG_MODE" = "1" ]; then
+        set -x
+    fi
 
-	        if [ "$DEBUG_MODE" = "1" ]; then
-	            set +x
-	        fi
-	} &
+    # nohup - Can be used, but it will cut logs from terminal screen
+    env DXVK_CONFIG_FILE="$SCRIPT_DIR/dxvk_hud.conf" \
+    "${DXVK_VARIABLES[@]}" \
+    "${MANGOHUD_VARIABLES[@]}" \
+    "${WINE_VARIABLES[@]}" \
+    "${LAUNCH_CMD[@]}"
+
+    #\
+    #2>&1 \
+    #| grep --invert-match 'dispatch_exception assertion failure exception' \
+    #| grep --invert-match 'experimental wow64 mode' \
+    #| grep --invert-match 'apartment not initialised' \
+    #| grep --invert-match 'fixme:' \
+    #>> "$LOG_FILE" &
+
+    if [ "$DEBUG_MODE" = "1" ]; then
+        set +x
+    fi
 }
 
 # === Main flow ===
+echo -e ""
+
 trap cleanup SIGINT SIGTERM
 
 parse_args "$@"
@@ -236,7 +261,7 @@ parse_args "$@"
 if [ "$DEBUG_MODE" = "1" ]; then
     log_debug "Final environment before launch:"
     echo
-    env "${DXVK_VARIABLES[@]}" "${MANGOHUD_VARIABLES[@]}" "${WINE_VARIABLES[@]}" | grep -E 'DXVK|MANGOHUD|WINE|GL_|PULSE|LOG|log|DEBUG'
+    env "${DXVK_VARIABLES[@]}" "${MANGOHUD_VARIABLES[@]}" "${WINE_VARIABLES[@]}" | grep -i -E 'DXVK|MANGOHUD|WINE|GL_|PULSE|LOG|log|DEBUG'
     echo
 fi
 
@@ -250,3 +275,6 @@ check_files
 kill_wineservers
 print_wine_info
 launch_battlenet
+
+log_info "🧹 The startup script completed successfully."
+exit 0

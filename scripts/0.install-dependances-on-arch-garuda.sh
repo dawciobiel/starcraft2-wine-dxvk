@@ -58,14 +58,17 @@ info "Creating folders..."
 mkdir -p "$HOME/Games/battlenet-logs"
 
 # WINEPREFIX
-mkdir -p "$HOME/Games/wine-10.17_staging"
+info "Creating directory WINEPREFIX [ $WINEPREFIX ]"
+mkdir -p "$WINEPREFIX"
 # DXVK_STATE_CACHE_PATH
+info "Creating directory dxvk_state [ $HOME/.cache/dxvk_state ]"
 mkdir -p "$HOME/.cache/dxvk_state"
 
 # __GL_SHADER_DISK_CACHE_PATH
+info "Creating directory dxvk_shader [ $HOME/.cache/dxvk_shader ]"
 mkdir -p "$HOME/.cache/dxvk_shader"
 
-info "Changing owner to user for cache directories..."
+info "Changing owner to user for cache directories [ $HOME/.cache/dxvk_state ], [ $HOME/.cache/dxvk_shader ]"
 chown -R $USER:$USER ~/.cache/dxvk_state ~/.cache/dxvk_shader
 
 # ────────────────────────────────────────────────────────────────
