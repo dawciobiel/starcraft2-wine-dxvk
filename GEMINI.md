@@ -1,5 +1,8 @@
 # Project Memory
 
+## Things to remember for future sessions:
+- Created `scripts/logger.sh` with granular logging functions (console-only, file-only, both). Refactored `4.run-battlenet-launcher.sh` (and its symlink `sc2-run-battlenet-launcher.sh`), `0.install-dependances-on-arch-garuda.sh`, `0.install-dependances-on-suse-thumbleweed.sh`, `1.install-dxvk.sh`, `2.install-dxvk-and-battlenet.sh`, `3.create-sc2-desktop.sh`, and `5.run-sc2.sh` to use the new centralized logging, maintaining original output destinations.
+
 ## 2025-11-12: Centralized Logging Refactor
 
 - **Objective**: Create a centralized logging script and refactor existing scripts to use it.

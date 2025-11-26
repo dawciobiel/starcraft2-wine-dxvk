@@ -169,7 +169,14 @@ function launch_battlenet() {
     log_header "Launching Battle.net Launcher..."
     log_info_file "Launching Battle.net Launcher"
 
-    LAUNCH_CMD=("$WINE_HOME$WINE_BIN" "$WINEPREFIX/$BATTLENET_EXE")
+    # Testing purpose:
+    #
+    # Exe file for pure 'SC2_x64.exe'
+    # EXE_FILE="$SC2_x64_EXE"
+    # Exe for [ $WINEPREFIX / Battle.net launcher ]
+    EXE_FILE=$WINEPREFIX/$BATTLENET_EXE
+
+    LAUNCH_CMD=("$WINE_HOME$WINE_BIN" "$EXE_FILE")
     if [ "$USE_GAMEMODE" = "1" ]; then
         LAUNCH_CMD=("gamemoderun" "${LAUNCH_CMD[@]}")
     fi
@@ -198,7 +205,7 @@ parse_args "$@"
 
 if [ "$DEBUG_MODE" = "1" ]; then
     log_debug "Final environment before launch:"
-    env "${DXVK_VARIABLES[@]}" "${MANGOHUD_VARIABLES[@]}" "${WINE_VARIABLES[@]}" | grep -i -E 'DXVK|MANGOHUD|WINE|GL_|PULSE|LOG|log|DEBUG'
+    env "${DXVK_VARIABLES[@]}" "${MANGOHUD_VARIABLES[@]}" "${WINE_VARIABLES[@]}" | grep -i -E 'DXVK|MANGOHUD|WINE|GL_|PULSE|LOG|DEBUG'
 fi
 
 validate_variables DXVK_VARIABLES "DXVK"

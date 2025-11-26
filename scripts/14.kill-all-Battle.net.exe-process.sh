@@ -43,6 +43,40 @@ for arg in "$@"; do
     esac
 done
 
+
+
+
+# Check required config files
+for conf in wine.conf; do
+    CONF_PATH="$(dirname "$0")/$conf"
+    if [ ! -f "$CONF_PATH" ]; then
+        log_error "Missing configuration file: $conf"
+        exit 1
+    fi
+done
+
+# Read config files
+source "$(dirname "$0")/wine.conf"
+
+
+
+# Kill all wineservers
+echo "Killing existing wineservers..."
+    wineserver -k
+    "$WINE_HOME$WINE_SERVER_BIN" -k
+    pkill wineserver 2>/dev/null || true
+
+# Show all 'defunct' processes
+echo "Show again all 'defunct' processes"
+  ps -eo pid=,args= | grep -Ei '<defunct>'
+
+
+
+
+
+
+
+
 # ─────────────────────────────────────────────────────────────
 # Get list of matching Battle.net processes, excluding this script
 mypid=$$

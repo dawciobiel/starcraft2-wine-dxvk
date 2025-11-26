@@ -26,7 +26,6 @@ export __GL_PERF_PROFILE=1
 # 3 = Quality
 
 ## Vulkan
-export DXVK_LOG_LEVEL=none
 # asynchronous shader compilation - DXVK_ASYNC
 export DXVK_ASYNC=1             # asynchronous shader compilation, przyspiesza start
 # export DXVK_HUD=0               # wyłącza nakładkę DXVK // Istnieje w dxvk.conf
@@ -35,6 +34,13 @@ export VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
 
 # Debugowanie problemow z `VK_ERROR_OUT_OF_HOST_MEMORY`
 export DXVK_MEMORY_TRACKER=0
-export DXVK_LOG_LEVEL=warn
+export DXVK_LOG_LEVEL=none
+# DXVK_LOG_LEVEL
+# none → wyłącza logi całkowicie (najczystsze uruchomienie, brak plików .log).
+# error → loguje tylko błędy krytyczne.
+# warn → loguje błędy i ostrzeżenia.
+# info → loguje podstawowe informacje (domyślne).
+# debug → loguje wszystko, bardzo szczegółowe (dla developerów).
+
 export DXVK_ENABLE_PIPECOMPILER=0
 

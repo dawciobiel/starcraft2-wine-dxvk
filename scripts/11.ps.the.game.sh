@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 # =============================================================================
 # Script Name: ps-the-game.sh
 # Description: Displays running Battle.net Launcher and StarCraft II processes
