@@ -21,7 +21,7 @@
 #   - Zombie (<defunct>) processes are also listed separately.
 # =============================================================================
 
-COLORS_FILE="colors"
+COLORS_FILE="$(dirname "$0")/colors"
 if [[ -f "$COLORS_FILE" ]]; then
   source "$COLORS_FILE"
 fi
